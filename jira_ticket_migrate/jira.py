@@ -19,6 +19,7 @@ class JiraTicket:
     Attributes:
         description (str): The description of the ticket.
         priority (str): The priority of the ticket. For example, "Medium".
+        project (str): The name of the project.
         resolution (str): A string, or None, containing the resolution
             of the ticket (should there be one).
         title (str): The title of the ticket.
@@ -45,6 +46,7 @@ class JiraTicket:
         Args:
             description: The description of the ticket.
             priority: The priority of the ticket. For example, "Medium".
+            project: The name of the project.
             resolution: A string, or None, containing the resolution of
                 the ticket (should there be one).
             title: The title of the ticket.
