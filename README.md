@@ -22,6 +22,18 @@ To see what's done, a picture tells the best story:
 ![migrated ticket
 example](https://via.placeholder.com/300.png?text=insert+picture+here)
 
+Notice that the following are preserved:
+
++ title
++ description
++ type
++ priority
++ status
++ resolution
+
+And possibly add the ticket number to that list (see above paragraph).
+Everything else is not preserved.
+
 ## Installation
 
 Using pip,
