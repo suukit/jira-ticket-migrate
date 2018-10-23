@@ -42,5 +42,5 @@ setup(
         ]
     },
     python_requires=">=3.6.0",
-    install_requires=["jira"],
+    install_requires=["jira", "PyYAML"],
 )
