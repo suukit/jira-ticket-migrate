@@ -9,7 +9,18 @@
 
 ## Note!!! This is a work in progress!
 
-Migrate some tickets from one Jira to another Jira.
+This is a program to help migrate tickets between Jira servers. *If* you
+have the appropriate privileges, there are better ways of doing this! If
+you don't, all you have available are messy solutions (including this).
+
+So what's this, then? This migrates tickets belonging to projects from
+one Jira server to Jira another server. If the project is fresh on the
+destination server, then ticket numbers will be preserved.
+
+To see what's done, a picture tells the best story:
+
+![migrated ticket
+example](https://via.placeholder.com/300.png?text=insert+picture+here)
 
 ## Installation
 
@@ -22,3 +33,7 @@ pip install jira-ticket-migrate
 Alternatively, you can run jira-ticket-migrate directly from source
 using the script
 [`run_jira_ticket_migrate.py`](run_jira_ticket_migrate.py).
+
+## Usage
+
+Usage instructions here
