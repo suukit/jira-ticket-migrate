@@ -1,3 +1,13 @@
 # jira-ticket-migrate config file
 
-foo: "bar"
+source-jira:
+  url: "https://source_jira.atlassian.com"
+  auth:
+    username: "AzureDiamond"
+    password: "hunter2"
+
+destination-jira:
+  url: "https://destination_jira.atlassian.com"
+  auth:
+    username: "AzureDiamond"
+    password: "hunter2"
