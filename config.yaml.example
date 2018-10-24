@@ -11,3 +11,7 @@ destination-jira:
   auth:
     username: "AzureDiamond"
     password: "hunter2"
+
+projects-to-migrate:
+  - "PROJONE"
+  - "PROJTWO"
