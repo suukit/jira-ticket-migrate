@@ -190,6 +190,7 @@ def push_ticket(jira: Jira, ticket: JiraTicket):
         "description": add_source_link_to_description(
             ticket.description, ticket.source_link
         ),
+        "issuetype": {"name": "Task"},
         "priority": {"name": ticket.priority},
         "project": {"id": jira.project(ticket.project).id},
         "summary": ticket.summary,
