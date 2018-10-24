@@ -34,6 +34,10 @@ Notice that the following are preserved:
 And possibly add the ticket number to that list (see above paragraph).
 Everything else is not preserved.
 
+Note that this program assumes that you're migrating to a new-ish Jira
+(2018-ish), since there are some key differences between old and new
+Jiras.
+
 ## Installation
 
 Using pip,

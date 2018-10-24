@@ -69,6 +69,30 @@ def create_blank_ticket(project: str) -> JiraTicket:
     )
 
 
+def translate_priority(priority: str) -> str:
+    """Translate to new Jira priority types.
+
+    Jira changed how their priority names, so some translation is
+    necessary if migrating from an older Jira.
+
+    Args:
+        priority: A ticket priority.
+
+    Returns:
+        A valid Jira priority.
+    """
+    if priority == "Blocker":
+        return "Highest"
+    elif priority == "Critical":
+        return "High"
+    elif priority == "Minor":
+        return "Low"
+    elif priority == "Trivial":
+        return "Lowest"
+
+    return priority
+
+
 def get_project_tickets(
     jira: Jira,
     project: str,
