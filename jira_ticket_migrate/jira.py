@@ -64,3 +64,27 @@ class JiraTicket:
         self.status = status
         self.title = title
         self.type = type_
+
+
+def create_blank_ticket(project: str) -> JiraTicket:
+    """Create a representation of a blank Jira ticket.
+
+    It's not actually blank, but the point it that is contains nothing
+    useful.
+
+    Args:
+        project: The name of the project.
+
+    Returns:
+        A "blank" JiraTicket.
+    """
+    return JiraTicket(
+        description="",
+        priority="Medium",
+        project=project,
+        resolution="Done",
+        source_link="null",
+        status="Resolved",
+        title="Blank ticket",
+        type_="Task",
+    )
