@@ -134,9 +134,9 @@ def get_project_tickets(
     while True:
         start = init * size
 
-        api_tickets = jira.search_issues("project=%s" % project, start, size)[
-            ::-1
-        ]
+        api_tickets = jira.search_issues(
+            "project = %s ORDER BY created ASC" % project, start, size
+        )
 
         # Check if we've reached the end
         if not api_tickets:
