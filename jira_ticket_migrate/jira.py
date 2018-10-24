@@ -141,6 +141,8 @@ def get_project_tickets(
 
                 ticket_counter += 1
 
+            ticket_counter += 1
+
             # Insert *this* ticket. First deal with attributes that we
             # have to be careful with Nones with. Then make the ticket.
             description = ticket.fields.description
