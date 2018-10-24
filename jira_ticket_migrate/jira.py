@@ -81,8 +81,10 @@ def translate_priority(priority: str) -> str:
     Returns:
         A valid Jira priority.
     """
-    if priority == "Blocker":
+    if priority in ("Blocker", "Critical"):
         return "Highest"
+    elif priority == "Major":
+        return "High"
     elif priority == "Critical":
         return "High"
     elif priority == "Minor":
