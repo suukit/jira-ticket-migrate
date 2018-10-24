@@ -15,7 +15,6 @@ class JiraTicket:
             of the ticket (should there be one).
         source_link (str): The URL of the ticket on the source Jira
             server.
-        status (str): The status of the ticket. For example, "Resolved".
         summary (str): The summary of the ticket.
         type_ (str): The issue type of the ticket. For example,
             "Improvement".
@@ -28,7 +27,6 @@ class JiraTicket:
         project: str,
         resolution: str,
         source_link: str,
-        status: str,
         summary: str,
         type_: str,
     ):
@@ -42,7 +40,6 @@ class JiraTicket:
                 the ticket (should there be one).
             source_link: The URL of the ticket on the source Jira
                 server.
-            status: The status of the ticket. For example, "Resolved".
             summary: The summary of the ticket.
             type_: The issue type of the ticket. For example,
                 "Improvement".
@@ -52,7 +49,6 @@ class JiraTicket:
         self.project = project
         self.resolution = resolution
         self.source_link = source_link
-        self.status = status
         self.summary = summary
         self.type = type_
 
@@ -75,7 +71,6 @@ def create_blank_ticket(project: str) -> JiraTicket:
         project=project,
         resolution="Done",
         source_link="null",
-        status="Resolved",
         summary="Blank ticket",
         type_="Task",
     )
@@ -162,7 +157,6 @@ def get_project_tickets(
                     project=project,
                     resolution=resolution,
                     source_link=ticket.permalink(),
-                    status=ticket.fields.status.name,
                     summary=ticket.fields.summary,
                     type_=ticket.fields.issuetype.name,
                 )
@@ -199,18 +193,35 @@ def push_ticket(jira: Jira, ticket: JiraTicket):
         jira: The Jira server to get tickets from.
         ticket: The ticket to push to the Jira server.
     """
+    # Create the ticket
     ticket_fields = {
         "description": add_source_link_to_description(
             ticket.description, ticket.source_link
         ),
         "issuetype": {"name": ticket.type},
         "priority": {"name": ticket.priority},
-        "project": {"name": ticket.project},
-        "status": {"name": ticket.status},
+        "project": {"id": jira.project(ticket.project).id},
         "summary": ticket.summary,
     }
 
-    if ticket.resolution is not None:
-        ticket_fields["resolution"] = {"name": ticket.resolution}
+    new_ticket = jira.create_issue(fields=ticket_fields)
 
-    jira.create_issue(fields=ticket_fields)
+    # Transition the ticket
+    if ticket.resolution is not None:
+        # List available transitions and search for the one we want (if
+        # it exists)
+        transitions = jira.transitions(new_ticket)
+
+        id_ = None
+
+        for transition in transitions:
+            if transition["name"] == ticket.resolution:
+                # Found it
+                id_ = transition["id"]
+                break
+
+        # Transition not available. That's okay.
+        if id_ is None:
+            return
+
+        jira.transition_issue(new_ticket, id_)
