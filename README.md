@@ -73,7 +73,7 @@ jira-ticket-migrate
 You can specify a config file explicitly with the `-c` option:
 
 ```
-jira-ticket-migrate /path/to/config.yaml
+jira-ticket-migrate -c /path/to/config.yaml
 ```
 
 Otherwise it will look for it at the root of the repository.
