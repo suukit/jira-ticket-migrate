@@ -17,16 +17,16 @@ So what's this, then? This migrates tickets belonging to projects from
 one Jira server to Jira another server. If the project is fresh on the
 destination server, then ticket numbers will be preserved.
 
-To see what's done, a picture tells the best story:
+To see what's done, a set of before and after pictures tells the best
+story:
 
-![migrated ticket
-example](https://via.placeholder.com/300.png?text=insert+picture+here)
+[![source ticket](https://i.imgur.com/UcbywFd.png)](https://i.imgur.com/KkGAD7b.png)
+[![migrated ticket](https://i.imgur.com/mN87KOB.png)](https://i.imgur.com/qIBUhQv.png)
 
 Notice that the following are preserved:
 
 + title
 + description
-+ type
 + priority
 + status
 + resolution
@@ -52,4 +52,25 @@ using the script
 
 ## Usage
 
-Usage instructions here
+Copy the example config file
+[`config.yaml.example`](config.yaml.example) to `config.yaml`
+
+```
+cp config.yaml.example config.yaml
+```
+
+and fill it in.
+
+Then run with
+
+```
+jira-ticket-migrate
+```
+
+You can specify a config file explicitly with the `-c` option:
+
+```
+jira-ticket-migrate /path/to/config.yaml
+```
+
+Otherwise it will look for it at the root of the repository.
