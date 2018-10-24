@@ -36,10 +36,10 @@ class JiraTicket:
         priority: str,
         project: str,
         resolution: str,
-        title: str,
-        type_: str,
         source_link: str,
         status: str,
+        title: str,
+        type_: str,
     ):
         """Initialize a Jira ticket.
 
@@ -60,7 +60,7 @@ class JiraTicket:
         self.priority = priority
         self.project = project
         self.resolution = resolution
-        self.title = title
-        self.type = type_
         self.source_link = source_link
         self.status = status
+        self.title = title
+        self.type = type_
