@@ -25,7 +25,7 @@ class JiraTicket:
         source_link (str): The URL of the ticket on the source Jira
             server.
         status (str): The status of the ticket. For example, "Resolved".
-        title (str): The title of the ticket.
+        summary (str): The summary of the ticket.
         type_ (str): The issue type of the ticket. For example,
             "Improvement".
     """
@@ -38,7 +38,7 @@ class JiraTicket:
         resolution: str,
         source_link: str,
         status: str,
-        title: str,
+        summary: str,
         type_: str,
     ):
         """Initialize a Jira ticket.
@@ -52,7 +52,7 @@ class JiraTicket:
             source_link: The URL of the ticket on the source Jira
                 server.
             status: The status of the ticket. For example, "Resolved".
-            title: The title of the ticket.
+            summary: The summary of the ticket.
             type_: The issue type of the ticket. For example,
                 "Improvement".
         """
@@ -62,7 +62,7 @@ class JiraTicket:
         self.resolution = resolution
         self.source_link = source_link
         self.status = status
-        self.title = title
+        self.summary = summary
         self.type = type_
 
 
@@ -85,6 +85,6 @@ def create_blank_ticket(project: str) -> JiraTicket:
         resolution="Done",
         source_link="null",
         status="Resolved",
-        title="Blank ticket",
+        summary="Blank ticket",
         type_="Task",
     )
