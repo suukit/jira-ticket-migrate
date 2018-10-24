@@ -7,8 +7,6 @@
 
 # jira-ticket-migrate
 
-## Note!!! This is a work in progress!
-
 This is a program to help migrate tickets between Jira servers. *If* you
 have the appropriate privileges, there are better ways of doing this! If
 you don't, all you have available are messy solutions (including this).
