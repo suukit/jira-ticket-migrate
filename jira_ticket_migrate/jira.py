@@ -22,12 +22,12 @@ class JiraTicket:
         project (str): The name of the project.
         resolution (str): A string, or None, containing the resolution
             of the ticket (should there be one).
-        title (str): The title of the ticket.
-        type_ (str): The issue type of the ticket. For example,
-            "Improvement".
         source_link (str): The URL of the ticket on the source Jira
             server.
         status (str): The status of the ticket. For example, "Resolved".
+        title (str): The title of the ticket.
+        type_ (str): The issue type of the ticket. For example,
+            "Improvement".
     """
 
     def __init__(
@@ -49,12 +49,12 @@ class JiraTicket:
             project: The name of the project.
             resolution: A string, or None, containing the resolution of
                 the ticket (should there be one).
-            title: The title of the ticket.
-            type_: The issue type of the ticket. For example,
-                "Improvement".
             source_link: The URL of the ticket on the source Jira
                 server.
             status: The status of the ticket. For example, "Resolved".
+            title: The title of the ticket.
+            type_: The issue type of the ticket. For example,
+                "Improvement".
         """
         self.description = description
         self.priority = priority
