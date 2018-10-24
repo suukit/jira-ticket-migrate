@@ -1,7 +1,9 @@
 """Contains the function for the program."""
 
+import sys
 from colorama import init, Style
 from jira import JIRA as Jira
+from jira.exceptions import JIRAError as JiraError
 from tqdm import tqdm
 import yaml
 from .jira import get_project_tickets, push_ticket
@@ -42,7 +44,16 @@ def main():
         print(Style.BRIGHT + "Migrating {}".format(project) + Style.RESET_ALL)
 
         # Get tickets
-        tickets = get_project_tickets(source_jira, project)
+        try:
+            tickets = get_project_tickets(source_jira, project)
+        except JiraError as e:
+            print(
+                Style.BRIGHT
+                + "Jira call failed! Here's the error:"
+                + Style.RESET_ALL
+            )
+            print(e)
+            sys.exit(1)
 
         # Push tickets
         print(
@@ -50,4 +61,13 @@ def main():
         )
 
         for ticket in tqdm(tickets):
-            push_ticket(destination_jira, ticket)
+            try:
+                push_ticket(destination_jira, ticket)
+            except JiraError as e:
+                print(
+                    Style.BRIGHT
+                    + "Jira call failed! Here's the error:"
+                    + Style.RESET_ALL
+                )
+                print(e)
+                sys.exit(1)
