@@ -20,8 +20,13 @@ destination server, then ticket numbers will be preserved.
 To see what's done, a set of before and after pictures tells the best
 story:
 
+**Source ticket**
+
 [![source ticket](https://i.imgur.com/UcbywFd.png)](https://i.imgur.com/KkGAD7b.png)
-[![migrated ticket](https://i.imgur.com/mN87KOB.png)](https://i.imgur.com/qIBUhQv.png)
+
+**Migrated ticket**
+
+[![migrated ticket](https://i.imgur.com/ddMvuBd.png)](https://i.imgur.com/qIBUhQv.png)
 
 Notice that the following are preserved:
 
