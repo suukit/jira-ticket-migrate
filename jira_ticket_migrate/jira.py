@@ -170,7 +170,7 @@ def get_project_tickets(
             tickets.append(
                 JiraTicket(
                     description=description,
-                    priority=ticket.fields.priority.name,
+                    priority=translate_priority(ticket.fields.priority.name),
                     project=project,
                     resolution=resolution,
                     source_link=ticket.permalink(),
