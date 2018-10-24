@@ -82,7 +82,10 @@ def create_blank_ticket(project: str) -> JiraTicket:
 
 
 def get_project_tickets(
-    jira: Jira, project: str, insert_blank_tickets: bool = True
+    jira: Jira,
+    project: str,
+    insert_blank_tickets: bool = True,
+    verbose: bool = True,
 ) -> List[JiraTicket]:
     """Get all tickets from a project in ascending order.
 
@@ -97,6 +100,7 @@ def get_project_tickets(
             example, if the project name is PROJ and PROJ-1 and PROJ-3
             exist on the Jira but not PROJ-2, this will fill a blank
             ticket for PROJ-2.  Defaults to True.
+        verbose (optional): Whether to log the tickets being processed. Defaults to True.
 
     Returns:
         A list of JiraTickets from ticket number 1 to ticket N, where N
@@ -124,6 +128,9 @@ def get_project_tickets(
 
         # Add in the tickets
         for ticket in api_tickets:
+            if verbose:
+                print("...loading %s" % ticket.key)
+
             this_ticket_num = int(ticket.key.split("-")[-1])
 
             # Insert blank tickets as necessary
