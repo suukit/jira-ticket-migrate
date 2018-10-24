@@ -116,14 +116,14 @@ def get_project_tickets(
     while True:
         start = init * size
 
-        tickets = jira.search_issues("project=%s" % project, start, size)
+        api_tickets = jira.search_issues("project=%s" % project, start, size)
 
         # Check if we've reached the end
-        if not tickets:
+        if not api_tickets:
             break
 
         # Add in the tickets
-        for ticket in tickets:
+        for ticket in api_tickets:
             this_ticket_num = int(ticket.key.split("-")[-1])
 
             # Insert blank tickets as necessary
