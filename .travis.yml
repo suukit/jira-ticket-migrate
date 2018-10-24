@@ -11,8 +11,8 @@ install:
   - pip install -r requirements.txt
 
 script:
-  # Basically absolutely nothing
-  - true
+  # Install
+  - coverage run setup.py install
 
 after_success:
   # Upload code coverage to Codecov
