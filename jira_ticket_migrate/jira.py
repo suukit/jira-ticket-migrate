@@ -150,6 +150,12 @@ def get_project_tickets(
             if resolution is not None:
                 resolution = resolution.name
 
+            # Make sub-tasks normal tasks on the destination Jira server
+            type_ = ticket.fields.issuetype.name
+
+            if type_ == "Sub-task":
+                type_ = "Task"
+
             tickets.append(
                 JiraTicket(
                     description=description,
@@ -158,7 +164,7 @@ def get_project_tickets(
                     resolution=resolution,
                     source_link=ticket.permalink(),
                     summary=ticket.fields.summary,
-                    type_=ticket.fields.issuetype.name,
+                    type_=type_,
                 )
             )
 
