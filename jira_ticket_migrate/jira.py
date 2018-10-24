@@ -16,8 +16,6 @@ class JiraTicket:
         source_link (str): The URL of the ticket on the source Jira
             server.
         summary (str): The summary of the ticket.
-        type_ (str): The issue type of the ticket. For example,
-            "Improvement".
     """
 
     def __init__(
@@ -28,7 +26,6 @@ class JiraTicket:
         resolution: str,
         source_link: str,
         summary: str,
-        type_: str,
     ):
         """Initialize a Jira ticket.
 
@@ -41,8 +38,6 @@ class JiraTicket:
             source_link: The URL of the ticket on the source Jira
                 server.
             summary: The summary of the ticket.
-            type_: The issue type of the ticket. For example,
-                "Improvement".
         """
         self.description = description
         self.priority = priority
@@ -50,7 +45,6 @@ class JiraTicket:
         self.resolution = resolution
         self.source_link = source_link
         self.summary = summary
-        self.type = type_
 
 
 def create_blank_ticket(project: str) -> JiraTicket:
@@ -72,7 +66,6 @@ def create_blank_ticket(project: str) -> JiraTicket:
         resolution="Done",
         source_link="null",
         summary="Blank ticket",
-        type_="Task",
     )
 
 
@@ -150,12 +143,6 @@ def get_project_tickets(
             if resolution is not None:
                 resolution = resolution.name
 
-            # Make sub-tasks normal tasks on the destination Jira server
-            type_ = ticket.fields.issuetype.name
-
-            if type_ == "Sub-task":
-                type_ = "Task"
-
             tickets.append(
                 JiraTicket(
                     description=description,
@@ -164,7 +151,6 @@ def get_project_tickets(
                     resolution=resolution,
                     source_link=ticket.permalink(),
                     summary=ticket.fields.summary,
-                    type_=type_,
                 )
             )
 
@@ -204,7 +190,6 @@ def push_ticket(jira: Jira, ticket: JiraTicket):
         "description": add_source_link_to_description(
             ticket.description, ticket.source_link
         ),
-        "issuetype": {"name": ticket.type},
         "priority": {"name": ticket.priority},
         "project": {"id": jira.project(ticket.project).id},
         "summary": ticket.summary,
