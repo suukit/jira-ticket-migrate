@@ -164,6 +164,9 @@ def get_project_tickets(
                 )
             )
 
+        # Move to next API page for next round
+        init += 1
+
     return tickets
 
 
