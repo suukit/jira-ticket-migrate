@@ -90,6 +90,7 @@ def get_project_tickets(
     insert_blank_tickets is set to True.
 
     Args:
+        jira: The Jira server to get tickets from.
         project: The project name.
         insert_blank_tickets (optional): If an intermediate ticket is
             not defined, fill in a blank ticket in its place. For
@@ -157,3 +158,45 @@ def get_project_tickets(
             )
 
     return tickets
+
+
+def add_source_link_to_description(description: str, link: str) -> str:
+    """Add the source ticket URL to the description.
+
+    Args:
+        description: The original ticket's description.
+        link: The URL to the source ticket.
+
+    Returns:
+        The modified description for the ticket.
+    """
+    link_message = "<This ticket was migrated from %s>" % link
+
+    if description:
+        link_message += "\r\n\r\n"
+
+    return link_message + description
+
+
+def push_ticket(jira: Jira, ticket: JiraTicket):
+    """Push a JiraTicket to a Jira server.
+
+    Args:
+        jira: The Jira server to get tickets from.
+        ticket: The ticket to push to the Jira server.
+    """
+    ticket_fields = {
+        "description": add_source_link_to_description(
+            ticket.description, ticket.link
+        ),
+        "issuetype": {"name": ticket.type},
+        "priority": {"name": ticket.priority},
+        "project": {"name": ticket.project},
+        "status": {"name": ticket.status},
+        "summary": ticket.summary,
+    }
+
+    if ticket.resolution is not None:
+        ticket_fields["resolution"] = {"name": ticket.resolution}
+
+    jira.create_issue(fields=ticket_fields)
