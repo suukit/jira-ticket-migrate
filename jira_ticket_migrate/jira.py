@@ -201,7 +201,7 @@ def push_ticket(jira: Jira, ticket: JiraTicket):
     """
     ticket_fields = {
         "description": add_source_link_to_description(
-            ticket.description, ticket.link
+            ticket.description, ticket.source_link
         ),
         "issuetype": {"name": ticket.type},
         "priority": {"name": ticket.priority},
