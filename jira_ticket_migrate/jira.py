@@ -112,7 +112,8 @@ def get_project_tickets(
             example, if the project name is PROJ and PROJ-1 and PROJ-3
             exist on the Jira but not PROJ-2, this will fill a blank
             ticket for PROJ-2.  Defaults to True.
-        verbose (optional): Whether to log the tickets being processed. Defaults to True.
+        verbose (optional): Whether to log the tickets being processed.
+            Defaults to True.
 
     Returns:
         A list of JiraTickets from ticket number 1 to ticket N, where N
