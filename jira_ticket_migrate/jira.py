@@ -146,8 +146,8 @@ def get_project_tickets(
         # Move to next API page for next round
         init += 1
 
-    # Keep track of what a ticket "should" be if we're inserting blank
-    # tickets
+    # Keep track of what the ticket number "should" be if we're
+    # inserting blank tickets
     ticket_counter = 1
 
     # Store JiraTicket objects for our tickets in here
