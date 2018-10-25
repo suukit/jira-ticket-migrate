@@ -85,8 +85,6 @@ def translate_priority(priority: str) -> str:
         return "Highest"
     elif priority == "Major":
         return "High"
-    elif priority == "Critical":
-        return "High"
     elif priority == "Minor":
         return "Low"
     elif priority == "Trivial":
