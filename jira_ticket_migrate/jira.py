@@ -120,68 +120,75 @@ def get_project_tickets(
         A list of JiraTickets from ticket number 1 to ticket N, where N
         is the last ticket number.
     """
-    tickets = []
-
-    # Keep track of what a ticket "should" be if we're inserting blank
-    # tickets
-    ticket_counter = 1
-
     # Offsets for the API
     init = 0
     size = 100
+
+    # Store all the API tickets to sort through later. Keys for this are
+    # ticket number. Values are the ticket object we get from the Jira
+    # SDK/API library.
+    api_tickets_dict = {}
 
     # Fetch from the API until there's no tickets left
     while True:
         start = init * size
 
-        api_tickets = jira.search_issues(
-            "project = %s ORDER BY created ASC" % project, start, size
-        )
+        api_tickets = jira.search_issues("project = %s" % project, start, size)
 
         # Check if we've reached the end
         if not api_tickets:
             break
 
-        # Add in the tickets
+        # Add the tickets
         for ticket in api_tickets:
-            if verbose:
-                print("...loading %s" % ticket.key)
-
-            this_ticket_num = int(ticket.key.split("-")[-1])
-
-            # Insert blank tickets as necessary
-            while insert_blank_tickets and ticket_counter < this_ticket_num:
-                tickets.append(create_blank_ticket(project))
-
-                ticket_counter += 1
-
-            ticket_counter += 1
-
-            # Insert *this* ticket. First deal with attributes that we
-            # have to be careful with Nones with. Then make the ticket.
-            description = ticket.fields.description
-
-            if description is None:
-                description = ""
-
-            resolution = ticket.fields.resolution
-
-            if resolution is not None:
-                resolution = resolution.name
-
-            tickets.append(
-                JiraTicket(
-                    description=description,
-                    priority=translate_priority(ticket.fields.priority.name),
-                    project=project,
-                    resolution=resolution,
-                    source_link=ticket.permalink(),
-                    summary=ticket.fields.summary,
-                )
-            )
+            ticket_num = int(ticket.key.split("-")[-1])
+            api_tickets_dict[ticket_num] = ticket
 
         # Move to next API page for next round
         init += 1
+
+    # Keep track of what a ticket "should" be if we're inserting blank
+    # tickets
+    ticket_counter = 1
+
+    # Store JiraTicket objects for our tickets in here
+    tickets = []
+
+    # Create JiraTicket objects from the tickets collected above
+    for ticket_num, ticket in sorted(api_tickets_dict.items()):
+        if verbose:
+            print("...loading %s" % ticket.key)
+
+        # Insert blank tickets as necessary
+        while insert_blank_tickets and ticket_counter < ticket_num:
+            tickets.append(create_blank_ticket(project))
+
+            ticket_counter += 1
+
+        ticket_counter += 1
+
+        # Insert *this* ticket. First deal with attributes that we
+        # have to be careful with Nones with. Then make the ticket.
+        description = ticket.fields.description
+
+        if description is None:
+            description = ""
+
+        resolution = ticket.fields.resolution
+
+        if resolution is not None:
+            resolution = resolution.name
+
+        tickets.append(
+            JiraTicket(
+                description=description,
+                priority=translate_priority(ticket.fields.priority.name),
+                project=project,
+                resolution=resolution,
+                source_link=ticket.permalink(),
+                summary=ticket.fields.summary,
+            )
+        )
 
     return tickets
 
