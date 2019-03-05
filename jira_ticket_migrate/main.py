@@ -17,7 +17,7 @@ def main():
 
     # Parse config file
     with open(cli_args.config, "r") as config_file:
-        config_dict = yaml.load(config_file)
+        config_dict = yaml.safe_load(config_file)
 
     # Initialize Colorama
     init()
