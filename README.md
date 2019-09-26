@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/mwiens91/jira-ticket-migrate/branch/master/graph/badge.svg)](https://codecov.io/gh/mwiens91/jira-ticket-migrate)
 [![PyPI](https://img.shields.io/pypi/v/jira-ticket-migrate.svg)](https://pypi.org/project/jira-ticket-migrate/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jira-ticket-migrate.svg)](https://pypi.org/project/jira-ticket-migrate/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 # jira-ticket-migrate
