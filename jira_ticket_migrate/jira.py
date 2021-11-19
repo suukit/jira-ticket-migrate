@@ -16,6 +16,11 @@ class JiraTicket:
         source_link (str): The URL of the ticket on the source Jira
             server.
         summary (str): The summary of the ticket.
+        labels (List[str]): List of labels
+        components (List[str]): List of components
+        status (str): ticket's status as name
+        issuetype (str): issue type as name
+        ticket_key (str): tickets key
     """
 
     def __init__(
@@ -26,6 +31,11 @@ class JiraTicket:
         resolution: str,
         source_link: str,
         summary: str,
+        labels: List[str],
+        components: List[str],
+        status: str,
+        issuetype: str,
+        ticket_key: str
     ):
         """Initialize a Jira ticket.
 
@@ -45,7 +55,11 @@ class JiraTicket:
         self.resolution = resolution
         self.source_link = source_link
         self.summary = summary
-
+        self.labels = labels
+        self.components = components
+        self.status = status
+        self.issuetype = issuetype
+        self.ticket_key = ticket_key
 
 def create_blank_ticket(project: str) -> JiraTicket:
     """Create a representation of a blank Jira ticket.
@@ -66,6 +80,11 @@ def create_blank_ticket(project: str) -> JiraTicket:
         resolution="Done",
         source_link="null",
         summary="Blank ticket",
+        labels=[],
+        components=[],
+        status="Open",
+        issuetype="Story",
+        key="TEST-1"
     )
 
 
@@ -82,22 +101,36 @@ def translate_priority(priority: str) -> str:
         A valid Jira priority.
     """
     if priority in ("Blocker", "Critical"):
-        return "Highest"
-    elif priority == "Major":
+        return "Very High"
+    elif priority == "High":
         return "High"
-    elif priority == "Minor":
+    elif priority == "Medium":
+        return "Medium"
+    elif priority == "Low":
         return "Low"
-    elif priority == "Trivial":
-        return "Lowest"
 
     return priority
 
+def translate_issuetype(issuetype: str) -> str:
+    """Translate issuetype
+
+    Args:
+       issuetype: A source issuetype
+
+    Returns:
+       a valid target issuetype
+    """
+    if issuetype in ("Defect", "Epic"):
+        return issuetype
+    else:
+        return "Story"
 
 def get_project_tickets(
     jira: Jira,
     project: str,
     insert_blank_tickets: bool = True,
     verbose: bool = True,
+    source_query: str = "",
 ) -> List[JiraTicket]:
     """Get all tickets from a project in ascending order.
 
@@ -132,7 +165,7 @@ def get_project_tickets(
     while True:
         start = init * size
 
-        api_tickets = jira.search_issues("project = %s" % project, start, size)
+        api_tickets = jira.search_issues("project = %s and (%s)" % (project, source_query), start, size)
 
         # Check if we've reached the end
         if not api_tickets:
@@ -178,6 +211,10 @@ def get_project_tickets(
         if resolution is not None:
             resolution = resolution.name
 
+        components = []
+        for comp in ticket.fields.components:
+            components.append(comp.name)
+
         tickets.append(
             JiraTicket(
                 description=description,
@@ -186,6 +223,11 @@ def get_project_tickets(
                 resolution=resolution,
                 source_link=ticket.permalink(),
                 summary=ticket.fields.summary,
+                labels=ticket.fields.labels,
+                components=components,
+                status=ticket.fields.status.name,
+                issuetype=translate_issuetype(ticket.fields.issuetype.name),
+                ticket_key=ticket.key
             )
         )
 
@@ -210,7 +252,7 @@ def add_source_link_to_description(description: str, link: str) -> str:
     return link_message + description
 
 
-def push_ticket(jira: Jira, ticket: JiraTicket):
+def push_ticket(jira: Jira, ticket: JiraTicket, dst_project: str):
     """Push a JiraTicket to a Jira server.
 
     Args:
@@ -222,16 +264,18 @@ def push_ticket(jira: Jira, ticket: JiraTicket):
         "description": add_source_link_to_description(
             ticket.description, ticket.source_link
         ),
-        "issuetype": {"name": "Task"},
+        "issuetype": {"name": ticket.issuetype},
         "priority": {"name": ticket.priority},
-        "project": {"id": jira.project(ticket.project).id},
+        "project": {"id": jira.project(dst_project).id},
         "summary": ticket.summary,
+        "components": ticket.components,
+        "labels": ticket.labels
     }
 
     new_ticket = jira.create_issue(fields=ticket_fields)
 
     # Transition the ticket
-    if ticket.resolution is not None:
+    if ticket.resolution is not None or ticket.status != "Open":
         # List available transitions and search for the one we want (if
         # it exists)
         transitions = jira.transitions(new_ticket)
@@ -239,13 +283,13 @@ def push_ticket(jira: Jira, ticket: JiraTicket):
         id_ = None
 
         for transition in transitions:
-            if transition["name"] == ticket.resolution:
+            if transition["name"] == ticket.status:
                 # Found it
                 id_ = transition["id"]
                 break
 
         # Transition not available. That's okay.
-        if id_ is None:
-            return
+        if id_ is not None:
+            jira.transition_issue(new_ticket, id_)
 
-        jira.transition_issue(new_ticket, id_)
+    return new_ticket

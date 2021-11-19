@@ -15,3 +15,29 @@ destination-jira:
 projects-to-migrate:
   - "PROJONE"
   - "PROJTWO"
+
+# key = src, value= dst. If no mapping exists for a status the original status will be set
+status-mapping:
+  "Open": "Open"
+  "In Progress": "In Progress"
+  "Pending": "Pending"
+  "Review": "Review"
+  "Closed": "Done"
+  "Release Ready": "Pending Release"
+
+# map coponent between src and dst project
+component-mapping:
+  "Public Cloud": "CIEA Development - Public Cloud"
+  "GMP TIC Infrastructure": "CIEA Development - GMP/TIC Infrastructure"
+  "Core": "CIEA Development - Core"
+  "Clara": "CIEA Development & Label Clara"
+  "No Label": "CIEA Development"
+
+add-labels:
+  - Migrated
+
+del-labels:
+  - ToBeMigrated
+
+# will be added to the ticket query if present
+source_query: "labels in (ToBeMigrated)"
