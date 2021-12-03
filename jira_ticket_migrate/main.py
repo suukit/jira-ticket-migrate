@@ -6,7 +6,7 @@ from jira import JIRA as Jira
 from jira.exceptions import JIRAError as JiraError
 from tqdm import tqdm
 import yaml
-from .jira import get_project_tickets, push_ticket
+from .jira import get_project_tickets, push_ticket, update_source_description
 from .runtime_args import parse_runtime_args
 from typing import List
 
@@ -111,9 +111,23 @@ def main():
         except JiraError as e:
             print(
                 Style.BRIGHT
-                + "Jira call failed! Here's the error:"
+                + "Jira call failed when adding link to target! Here's the error:"
                 + Style.RESET_ALL
             )
             print(e)
             sys.exit(1)
 
+        try:
+            source_jira.add_simple_link(ticket.ticket_key,
+            {"url": new_ticket.permalink(),
+            "title": "Migrated to %s" % new_ticket.key})
+        except JiraError as e:
+            print(
+                Style.BRIGHT
+                + "Jira call failed when adding link to source! Here's the error:"
+                + Style.RESET_ALL
+            )
+            print(e)
+            sys.exit(1)
+
+        update_source_description(source_jira, ticket, new_ticket)

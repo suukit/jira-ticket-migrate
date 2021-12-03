@@ -2,6 +2,7 @@
 
 from typing import List
 from jira import JIRA as Jira
+from jira import resources as JiraResources
 
 
 class JiraTicket:
@@ -233,6 +234,21 @@ def get_project_tickets(
 
     return tickets
 
+def update_source_description(jira: Jira, ticket: JiraTicket, new_ticket: JiraResources.Issue):
+    """Add a link to new ticket into source ticket's description.
+
+    Args:
+        jira: The original ticket's jira source object.
+        ticket: the JiraTicket object for the source object
+        new_ticket. jira issue object of new ticket.
+
+    Returns:
+        The modified description for the ticket.
+    """
+    link_message = "<*This ticket has been migrated to %s, please update your watches*>" % new_ticket.permalink()
+
+    issue = jira.issue(ticket.ticket_key)
+    issue.update(description=link_message + "\r\n\r\n" + ticket.description)
 
 def add_source_link_to_description(description: str, link: str) -> str:
     """Add the source ticket URL to the description.
